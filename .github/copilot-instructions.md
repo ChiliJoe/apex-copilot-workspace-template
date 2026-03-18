@@ -1,0 +1,1 @@
+Before generating any code or CLI commands, refer to .copilot-context.md to resolve placeholders like {connection-name} or {appid}. Always check the instructions in .github/instructions/ for any specific guidelines related to the file you are working on.
