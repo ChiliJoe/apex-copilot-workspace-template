@@ -16,10 +16,10 @@ Replace `{connection-name}` with the active connection name for the target schem
 Execute scripts from command line using the following format:
 
 ```bash
-echo "exit" | sql -name {connection-name} @path/to/script.sql
+sql -name {connection-name} @path/to/script.sql
 ```
 
-This ensures the script runs and then exits the SQL session automatically. Always specify the connection name to ensure scripts run against the correct database and schema.
+Always specify the connection name to ensure scripts run against the correct database and schema.
 
 ## Writing Scripts to the Workspace
 
