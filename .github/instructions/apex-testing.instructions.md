@@ -5,12 +5,15 @@ description: "Use when testing the APEX application via Playwright, browser auto
 
 ## Application URL
 
-The Oracle APEX application is hosted at: {app-url}
+The Oracle APEX application is hosted at: {apex-workspace-runtime-url}/{app-alias}/. Use this URL for all testing activities, including Playwright tests, browser automation, and manual testing.
 
-- **App ID**: {appid}
-- **App Alias**: {app-alias}
-- **Schema**: {app-schema}
-- **Database Version**: {database-version}
+When navigating / rewriting the URL for testing, ensure the `session` query parameter is included to maintain session state and application context. The URL should follow this format:
+
+```
+{apex-workspace-runtime-url}/{app-alias}/{page-alias}/?session={session-id}
+```
+
+Where `{session-id}` is the active session identifier for the APEX application. This ensures that any automated testing or browser navigation maintains the correct session context and allows for accurate testing of authenticated features and application behavior. Always verify that the session parameter is included when accessing the app to avoid unexpected redirects or authentication issues during testing.
 
 ## Login Flow
 

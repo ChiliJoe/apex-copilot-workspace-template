@@ -23,9 +23,15 @@
    sql -name {connection-name} @export-app.sql
    ```
 
+   Or execute the `refresh-export.sh` script:
+
+   ```bash
+   ./refresh-export.sh
+   ```
+
    The connection must use the app's parsing schema.
 
-4. **Export relevant DDL** — Export DDL for any database objects involved in the work to `db-scripts/{object-type}/` using the DDL commands below.
+4. **Export relevant DDL** — Export DDL for any database objects involved in the work to `db-scripts/{object-type}/` using the DDL commands below. To login to SQLcl, run `sql -name {connection-name}`.
 
 5. Update the environment details in `.github/.copilot-context.md` file.
 

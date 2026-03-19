@@ -13,6 +13,14 @@ sql -name {connection-name}
 
 Replace `{connection-name}` with the active connection name for the target schema. Once connected, execute scripts with `@path/to/script.sql`.
 
+Execute scripts from command line using the following format:
+
+```bash
+echo "exit" | sql -name {connection-name} @path/to/script.sql
+```
+
+This ensures the script runs and then exits the SQL session automatically. Always specify the connection name to ensure scripts run against the correct database and schema.
+
 ## Writing Scripts to the Workspace
 
 Always write scripts to the project workspace **before** executing them. Never run ad-hoc SQL directly in the terminal without a corresponding file.
