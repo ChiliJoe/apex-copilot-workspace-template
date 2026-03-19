@@ -101,3 +101,44 @@ db-scripts/
       example_column VARCHAR2(100 CHAR)
   );
   ```
+
+- When creating or altering tables, include descriptive comments on the table and columns to improve maintainability. For example:
+
+  ```sql
+  COMMENT ON TABLE example_table IS 'This table stores example data';
+  COMMENT ON COLUMN example_table.example_column IS 'This column stores example values';
+  ```
+
+- Include useful docstrings to describe the purpose and functionality of packages, procedures, and functions. For example:
+
+  ```sql
+  CREATE OR REPLACE PACKAGE my_package AS
+  /* 
+     This package provides utility functions for processing data 
+
+     Created by: Github Copilot ([model-name if available])
+     Created on: [Creation Date
+  */
+      FUNCTION process_data(p_input VARCHAR2) RETURN VARCHAR2;
+  END my_package;
+  ```
+
+  ```sql
+  CREATE OR REPLACE FUNCTION my_function(p_input VARCHAR2) RETURN VARCHAR2 IS
+    /*
+      This function processes the input data and returns a result
+
+      Input parameters:
+          p_input - The input data to be processed
+      Returns:
+          A string indicating the result of processing
+      Exceptions:
+          Raises an exception if the input data is invalid
+
+      Created by: Github Copilot ([model-name if available])
+      Created on: [Creation Date]
+    */
+  BEGIN
+      RETURN 'Processed: ' || p_input;
+  END my_function;
+  ```

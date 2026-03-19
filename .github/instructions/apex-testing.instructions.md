@@ -25,6 +25,15 @@ The APEX app requires authentication. When testing via Playwright or browser aut
 4. After the user confirms login, take a snapshot to verify the authenticated page loaded
 5. Proceed with automated testing
 
+## Troubleshooting Internal Errors
+
+If you encounter an internal error, check the contents of APEX_DEBUG_MESSAGES view in the database for detailed error messages and stack traces. This can provide insights into what went wrong during testing and help identify any issues with the application or test scripts.
+
+If needed, you can also enable additional debugging in the APEX application by setting the `debug` parameter in the URL to `YES`:
+
+```{apex-workspace-runtime-url}/{app-alias}/?debug=YES&session={session-id}
+```
+
 ## SQLcl Connection
 
 When running database queries or PL/SQL tests, use:

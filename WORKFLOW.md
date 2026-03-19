@@ -33,7 +33,7 @@
 
 4. **Export relevant DDL** — Export DDL for any database objects involved in the work to `db-scripts/{object-type}/` using the DDL commands below. To login to SQLcl, run `sql -name {connection-name}`.
 
-5. Update the environment details in `.github/.copilot-context.md` file.
+5. Update the environment details and project standards in `.github/.copilot-context.md` file.
 
 6. **Initialize git and baseline** — Run `git init` and commit all exported files as the baseline before making any changes.
 
