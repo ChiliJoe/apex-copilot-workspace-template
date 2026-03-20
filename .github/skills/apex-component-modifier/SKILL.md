@@ -3,6 +3,7 @@ name: apex-component-modifier
 description: Export/patch/import Oracle APEX components via SQLcl MCP. Covers pages, regions, items, buttons, processes, DAs, validations, LOVs, auth schemes, templates, IR, IG, charts, maps, cards, and all shared components.
 argument-hint: "[conn|env] [app-id] [component] -- <change request>"
 disable-model-invocation: false
+allowed-tools: Read, Write, Edit, Grep, Glob, Bash, mcp__sqlcl__connect, mcp__sqlcl__run-sql, mcp__sqlcl__run-sql-async
 ---
 
 # Oracle APEX Component Modifier (SQLcl MCP)
@@ -25,7 +26,7 @@ If inputs incomplete after defaults, resolve via `apex list` or APEX views.
 
 ## Preconditions
 
-- SQLcl MCP server available (apex commands + SQL/PLSQL)
+- SQLcl MCP server available (apex commands + SQL/PLSQL). Connect using `mcp__sqlcl__connect` with the `{connection-name}` from `.github/.copilot-context.md`. Fall back to terminal `sql -name {connection-name}` only when MCP is unavailable.
 - APEX export already available in `apex/` folder (run `refresh-export.sh` beforehand)
 - `references/apex_imp/` docs present
 - Filesystem write access
@@ -33,7 +34,7 @@ If inputs incomplete after defaults, resolve via `apex list` or APEX views.
 ## Workflow
 
 ### 0) MCP tool discovery
-Confirm SQLcl MCP tools available for: apex commands, ad-hoc SQL, script execution.
+Confirm SQLcl MCP tools are available: `mcp__sqlcl__connect`, `mcp__sqlcl__run-sql`, `mcp__sqlcl__run-sql-async`. Connect using `mcp__sqlcl__connect` with the `{connection-name}` from `.github/.copilot-context.md`. If MCP is unavailable, fall back to terminal `sql -name {connection-name}`.
 
 ### 1) Create safe working area
 Ensure git baseline commit exists before making changes. Work directly with existing `apex/` folder structure.
@@ -61,7 +62,7 @@ Verify `install_component.sql` (partial) or `install.sql` (full) exists for targ
 Split into DB changes (DDL/DML/PLSQL) and APEX patches. Use `templates/patch_plan.md`. Order: DB first -> patch export -> import.
 
 ### 6) Apply DB changes
-Generate idempotent scripts. Execute via SQLcl MCP. Validate compilation.
+Generate idempotent scripts. Execute via `mcp__sqlcl__run-sql` (preferred) or terminal `sql -name {connection-name}` (fallback). Validate compilation.
 
 ### 7) Patch exported file(s)
 **Principle:** minimal changes, stable anchors, preserve `begin...end;`/`/` structure.
@@ -71,6 +72,7 @@ Generate idempotent scripts. Execute via SQLcl MCP. Validate compilation.
 4. Run `templates/validation_checklist.md` + `bash tools/validate_export.sh <file>`
 
 ### 8) Import via SQLcl MCP
+Use `mcp__sqlcl__run-sql` (preferred) or terminal `sql -name {connection-name}` (fallback):
 - Same environment: `@apex/f<APP_ID>/install_component.sql`
 - Different environment: prepend `apex_application_install` context block first
 - Capture install log

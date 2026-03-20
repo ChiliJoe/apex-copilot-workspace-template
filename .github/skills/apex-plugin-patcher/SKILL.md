@@ -20,7 +20,7 @@ The workflow produces:
 
 ## Inputs
 Recommended argument structure (free-form is fine, but this is preferred):
-- `$0`: SQLcl connection name (e.g., `idm_cc`, `DEV`, `STG`) — passed to `sql -name <conn>` for optional install step
+- `$0`: SQLcl connection name (e.g., `DEV`, `STG`) — passed to `sql -name <conn>` for optional install step
 - `$1`: plugin name or path fragment (e.g., `COM_VENDOR_MY_PLUGIN` or just `my_plugin`)
 - Remaining args: what to change and why
 
@@ -31,7 +31,7 @@ If the plugin name or file paths are unclear, use `Glob` to discover them under 
 - Human-readable source files exist under `apex/f<APP_ID>/readable/application/shared_components/plugin_static_files/`
 - The installation SQL file exists under `apex/f<APP_ID>/application/shared_components/plugins/item_type/`
 - Python 3 is available on PATH for hex re-encoding
-- For live install: a configured SQLcl MCP server with access to the target schema
+- For live install: connect via `mcp__sqlcl__connect` using the `{connection-name}` from `.github/.copilot-context.md`. Fall back to terminal `sql -name {connection-name}` only when the SQLcl MCP server is unavailable.
 
 ## Reference documentation
 This skill directory contains:
@@ -87,9 +87,15 @@ Confirm:
 - `wwv_flow_imp.component_end` still present at the end
 
 ### 7) Install and validate (optional)
-Connect via SQLcl and run:
+Always resolve `{connection-name}` from `.github/.copilot-context.md` before connecting.
+
+**Preferred — SQLcl MCP Server:**
+1. Connect via `mcp__sqlcl__connect` with `{connection-name}`.
+2. Run install via `mcp__sqlcl__run-sql` with `@apex/<appid>/application/shared_components/plugins/item_type/<plugin_file>.sql`.
+
+**Fallback — Terminal** (if MCP is unavailable):
 ```sh
-sql -name <connection_name> @apex/<appid>/application/shared_components/plugins/item_type/<plugin_file>.sql
+sql -name {connection-name} @apex/<appid>/application/shared_components/plugins/item_type/<plugin_file>.sql
 ```
 Then:
 - Hard-refresh the browser (Ctrl+Shift+R) to bust cached JS/CSS

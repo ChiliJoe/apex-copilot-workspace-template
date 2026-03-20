@@ -36,10 +36,23 @@ If needed, you can also enable additional debugging in the APEX application by s
 
 ## SQLcl Connection
 
-When running database queries or PL/SQL tests, use:
+Always resolve `{connection-name}` from `.github/.copilot-context.md` before connecting to the database.
+
+### Preferred: SQLcl MCP Server
+
+When the SQLcl MCP server is available, use it for all database queries and PL/SQL tests:
+
+1. **Connect** — call `mcp__sqlcl__connect` with the `{connection-name}` from `.github/.copilot-context.md`.
+2. **Run queries** — call `mcp__sqlcl__run-sql` with the SQL statement (e.g., `SELECT * FROM APEX_DEBUG_MESSAGES WHERE ...`).
+
+This is the preferred method for ad-hoc debugging queries such as inspecting `APEX_DEBUG_MESSAGES`.
+
+### Fallback: Terminal
+
+If the SQLcl MCP server is unavailable, use SQLcl in the terminal:
 
 ```
 sql -name {connection-name}
 ```
 
-Where `connection-name` is configured to connect to the {app-schema} schema on the same database. This allows you to run SQL and PL/SQL tests against the same database that the APEX app uses, ensuring consistency between application behavior and database state during testing.
+Where `{connection-name}` is configured to connect to the {app-schema} schema on the same database. This allows you to run SQL and PL/SQL tests against the same database that the APEX app uses, ensuring consistency between application behavior and database state during testing.

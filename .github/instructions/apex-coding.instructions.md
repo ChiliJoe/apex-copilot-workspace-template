@@ -5,15 +5,26 @@ description: "Use when writing, modifying, or deploying Oracle APEX application 
 
 ## Executing Scripts
 
-Use SQLcl with a named connection to run scripts on the database:
+Always resolve `{connection-name}` from `.github/.copilot-context.md` before connecting to the database.
+
+### Preferred: SQLcl MCP Server
+
+When the SQLcl MCP server is available, use it for all database operations:
+
+1. **Connect** — call `mcp__sqlcl__connect` with the `{connection-name}` from `.github/.copilot-context.md`.
+2. **Run SQL / scripts** — call `mcp__sqlcl__run-sql` (or `mcp__sqlcl__run-sql-async` for long-running operations) passing the SQL statement or `@path/to/script.sql`.
+
+### Fallback: Terminal
+
+If the SQLcl MCP server is unavailable, use SQLcl in the terminal:
 
 ```bash
 sql -name {connection-name}
 ```
 
-Replace `{connection-name}` with the active connection name for the target schema. Once connected, execute scripts with `@path/to/script.sql`.
+Once connected, execute scripts with `@path/to/script.sql`.
 
-Execute scripts from command line using the following format:
+Or execute directly from the command line:
 
 ```bash
 sql -name {connection-name} @path/to/script.sql
@@ -87,7 +98,7 @@ db-scripts/
 - Use **lowercase** for file and folder names.
 - One object per file.
 - Include a trailing `/` (forward slash) to execute the PL/SQL block where appropriate.
-- Write the script file first, then execute it via `sql -name {connection-name}` with `@db-scripts/{object-type}/{object-name}.{ext}`. For example:
+- Write the script file first, then execute it. Prefer the SQLcl MCP server: call `mcp__sqlcl__run-sql` with `@db-scripts/{object-type}/{object-name}.{ext}`. If MCP is unavailable, fall back to the terminal:
 
   ```bash
   sql -name {connection-name} @db-scripts/package/my_package.pks
