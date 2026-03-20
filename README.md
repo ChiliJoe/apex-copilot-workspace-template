@@ -22,6 +22,7 @@ A project template for AI-assisted Oracle APEX development using GitHub Copilot,
 │   │   ├── apex-coding.instructions.md
 │   │   └── apex-testing.instructions.md
 │   └── skills/                    # Custom Copilot skills
+│       ├── apex-component-modifier/
 │       └── apex-plugin-patcher/
 ├── apex/                          # Exported APEX application (generated)
 ├── db-scripts/                    # Exported DDL scripts (generated)
