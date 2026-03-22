@@ -72,10 +72,30 @@ Generate idempotent scripts. Execute via `mcp__sqlcl__run-sql` (preferred) or te
 4. Run `templates/validation_checklist.md` + `bash tools/validate_export.sh <file>`
 
 ### 8) Import via SQLcl MCP
-Use `mcp__sqlcl__run-sql` (preferred) or terminal `sql -name {connection-name}` (fallback):
-- Same environment: `@apex/f<APP_ID>/install_component.sql`
+
+> **`@` is restricted in MCP.** `mcp__sqlcl__run-sql` blocks file execution (`@`) with `SP2-0738: Restricted command`. Always use the terminal for APEX file imports.
+
+> **`SET DEFINE OFF` is mandatory.** APEX export files contain JavaScript/CSS with `&` characters (e.g., `&fc`, `&n`). Without `SET DEFINE OFF`, SQLcl hangs prompting `Enter value for ...`.
+
+To import, create a wrapper script and run it via terminal:
+
+```sql
+-- _import_wrapper.sql
+SET DEFINE OFF
+@apex/f<APP_ID>/install_component.sql
+EXIT
+```
+
+```bash
+sql -name {connection-name} @_import_wrapper.sql
+```
+
+- Same environment: `@apex/f<APP_ID>/install_component.sql` (via wrapper)
 - Different environment: prepend `apex_application_install` context block first
 - Capture install log
+- Clean up the wrapper script after import
+
+> **Do not** use heredoc (`<<'EOF'`) piped into `sql` -- this fails in MINGW64/Git Bash. Always write a wrapper `.sql` file.
 
 ### 9) Verify and deliver
 Re-export + diff. Deliver: change summary, modified files, patch diff, import log.
@@ -93,6 +113,8 @@ Re-export + diff. Deliver: change summary, modified files, patch diff, import lo
 | Import compilation error | `show errors`; fix DB objects; re-import |
 | Component broken | Re-import baseline export |
 | Unknown state | Re-export from APEX; diff against patched file |
+| `SP2-0738: Restricted command` on `@` via MCP | Use terminal `sql -name {connection-name}` with wrapper script instead of MCP |
+| `Enter value for ...` hang during import | Add `SET DEFINE OFF` at top of wrapper script before `@` command |
 
 **Rollback:** git baseline -> `git checkout` + re-import. No git -> re-export from APEX. DB reversal -> idempotent DROP/ALTER scripts.
 

@@ -12,7 +12,8 @@ Always resolve `{connection-name}` from `.github/.copilot-context.md` before con
 When the SQLcl MCP server is available, use it for all database operations:
 
 1. **Connect** — call `mcp__sqlcl__connect` with the `{connection-name}` from `.github/.copilot-context.md`.
-2. **Run SQL / scripts** — call `mcp__sqlcl__run-sql` (or `mcp__sqlcl__run-sql-async` for long-running operations) passing the SQL statement or `@path/to/script.sql`.
+2. **Run SQL / scripts** — call `mcp__sqlcl__run-sql` (or `mcp__sqlcl__run-sql-async` for long-running operations) passing the SQL statement.
+3. **File execution (`@`) is restricted** — `mcp__sqlcl__run-sql` blocks `@path/to/script.sql` with `SP2-0738: Restricted command`. To execute `.sql` files, use the **Terminal** fallback below.
 
 ### Fallback: Terminal
 
@@ -29,6 +30,29 @@ Or execute directly from the command line:
 ```bash
 sql -name {connection-name} @path/to/script.sql
 ```
+
+### Importing APEX Export Files
+
+APEX export files (pages, shared components, etc.) contain JavaScript and CSS with `&` characters (e.g., `&fc`, `&n`). SQLcl interprets `&` as a substitution variable prefix by default, causing the session to hang with `Enter value for ...` prompts.
+
+**Always use `SET DEFINE OFF` before importing APEX export files.**
+
+The reliable pattern is to create a wrapper SQL script:
+
+```sql
+-- _import_wrapper.sql
+SET DEFINE OFF
+@apex/f{appid}/application/pages/page_NNNNN.sql
+EXIT
+```
+
+Then execute:
+
+```bash
+sql -name {connection-name} @_import_wrapper.sql
+```
+
+> **Do not** use heredoc (`<<'EOF'`) piped into `sql` — this fails in MINGW64/Git Bash environments. Always write a wrapper `.sql` file instead.
 
 Always specify the connection name to ensure scripts run against the correct database and schema.
 
