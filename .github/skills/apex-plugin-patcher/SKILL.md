@@ -1,6 +1,6 @@
 ---
 name: apex-plugin-patcher
-description: Patch an Oracle APEX plugin's PL/SQL render/AJAX logic or its static JS/CSS files. Edits the human-readable source files, re-encodes hex blobs, and syncs the plugin installation SQL file — then optionally installs and validates via SQLcl MCP. TRIGGER when: user asks to fix, modify, or add behaviour to an APEX plugin (COM.* plugin names, plugin SQL files, or plugin JS/CSS static files).
+description: "Patch an Oracle APEX plugin's PL/SQL render/AJAX logic or its static JS/CSS files. Edits the human-readable source files, re-encodes hex blobs, and syncs the plugin installation SQL file — then optionally installs and validates via SQLcl MCP. TRIGGER when: user asks to fix, modify, or add behaviour to an APEX plugin (COM.* plugin names, plugin SQL files, or plugin JS/CSS static files)."
 argument-hint: "[conn] [plugin-name] -- <change description>"
 disable-model-invocation: false
 allowed-tools: Read, Write, Edit, Grep, Glob, Bash(python3 *), mcp__sqlcl__connect, mcp__sqlcl__run-sql, mcp__sqlcl__run-sql-async
