@@ -12,6 +12,10 @@ A project template for AI-assisted Oracle APEX development using GitHub Copilot,
 - [Python 3.12+](https://www.python.org/)
 - [SQLcl](https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/) (Oracle SQL command-line tool)
 
+### Setting Playwright to use MS Edge
+
+Add the args `"--browser", "msedge"` to the playwright mcp server definition to set MS Edge as the Playwright browser.
+
 ## Project Structure
 
 ```
