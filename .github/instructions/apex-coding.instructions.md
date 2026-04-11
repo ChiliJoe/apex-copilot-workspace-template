@@ -17,18 +17,25 @@ When the SQLcl MCP server is available, use it for all database operations:
 
 ### Fallback: Terminal
 
-If the SQLcl MCP server is unavailable, use SQLcl in the terminal:
+If the SQLcl MCP server is unavailable, use SQLcl in the terminal.
 
-```bash
-sql -name {connection-name}
-```
+> **PowerShell `@` splatting conflict:** PowerShell interprets `@` as a splatting operator, so `sql -name {connection-name} @script.sql` will fail with `SplattingNotPermitted`. Always wrap the command in `cmd /c` when running from PowerShell:
+>
+> ```powershell
+> cmd /c "cd /d ""{workspace-path}"" && sql -name {connection-name} @script.sql"
+> ```
 
-Once connected, execute scripts with `@path/to/script.sql`.
-
-Or execute directly from the command line:
+In **bash / Git Bash**, `@` works natively:
 
 ```bash
 sql -name {connection-name} @path/to/script.sql
+```
+
+Or connect interactively first, then execute scripts:
+
+```bash
+sql -name {connection-name}
+SQL> @path/to/script.sql
 ```
 
 ### Importing APEX Export Files
@@ -49,7 +56,13 @@ EXIT
 Then execute:
 
 ```bash
+# Bash / Git Bash
 sql -name {connection-name} @_import_wrapper.sql
+```
+
+```powershell
+# PowerShell (must wrap in cmd /c to avoid @ splatting error)
+cmd /c "cd /d ""{workspace-path}"" && sql -name {connection-name} @_import_wrapper.sql"
 ```
 
 > **Do not** use heredoc (`<<'EOF'`) piped into `sql` — this fails in MINGW64/Git Bash environments. Always write a wrapper `.sql` file instead.
