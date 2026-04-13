@@ -31,7 +31,8 @@ If you encounter an internal error, check the contents of APEX_DEBUG_MESSAGES vi
 
 If needed, you can also enable additional debugging in the APEX application by setting the `debug` parameter in the URL to `YES`:
 
-```{apex-workspace-runtime-url}/{app-alias}/?debug=YES&session={session-id}
+```
+{apex-workspace-runtime-url}/{app-alias}/?debug=YES&session={session-id}
 ```
 
 ## SQLcl Connection
